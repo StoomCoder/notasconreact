@@ -22,6 +22,7 @@ handleRemove(id){
       <div className="Note">
 
         <span
+        type="button" class="close" data-dismiss="modal" aria-label="Close"
         onClick={() =>  this.handleRemove(this.noteId) }
         >&times; </span>
         <p>{this.noteContent}</p>

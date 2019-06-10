@@ -1,34 +1,58 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import './App.css';
 
 import Note from './Note/Note.jsx';
 import NoteForm from './NoteForm/NoteForm.jsx';
+
+import 'firebase/database';
+import firebase from 'firebase';
+import { DB_CONFIG } from './Config/Config.js';
+
 class App extends Component {
 
 constructor(){
   super();
       this.state = {
     notes: [
-      {noteId: 1, noteContent: 'note 1'},
-      {noteId: 2, noteContent: 'note 2'}
+      //{noteId: 1, noteContent: 'note 1'},
+      // {noteId: 2, noteContent: 'note 2'}
       ]
     };
+
+    this.app = firebase.initializeApp(DB_CONFIG);
+    this.db = this.app.database().ref().child('notes');
+
       this.addNote = this.addNote.bind(this);
 }
+
+componentDidMount(){
+  const {notes} = this.state;
+  this.db.on('child_added', snap => {
+    notes.push({
+      noteId: snap.key,
+      noteContent: snap.val().noteContent
+    })
+    this.setState({notes});
+  });
+}
+
 removeNote(){
 
   }
 
 addNote(note){
-    let { notes } = this.state;
-      notes.push({
-    noteId: notes.length + 1,
-    noteContent: note
-      
-  });
-      this.setState({
-    notes: notes
-  });
+    //let { notes } = this.state;
+      //notes.push({
+    //noteId: notes.length + 1,
+    //noteContent: note
+
+  //});
+  //    this.setState({
+  //  notes: notes
+  //});
+
+  this.db.push().set({noteContent: note});
+
 
   }
 render(){
