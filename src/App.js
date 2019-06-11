@@ -23,6 +23,7 @@ constructor(){
     this.db = this.app.database().ref().child('notes');
 
       this.addNote = this.addNote.bind(this);
+      this.removeNote = this.removeNote.bind(this);
 }
 
 componentDidMount(){
@@ -34,9 +35,21 @@ componentDidMount(){
     })
     this.setState({notes});
   });
+
+  this.db.on('child_removed', snap => {
+    for (let i = 0; i < notes.length; i++) {
+      if (notes[i].noteId == snap.key) {
+        notes.splice(i,1)
+
+      }
+    }
+    this.setState(notes);
+  });
 }
 
-removeNote(){
+removeNote(noteId){
+
+  this.db.child(noteId).remove();
 
   }
 
@@ -77,6 +90,7 @@ render(){
                   noteContent={note.noteContent}
                   noteId={note.noteId}
                   key={note.noteId}
+                  removeNote={this.removeNote}
                   />
                 )
             })

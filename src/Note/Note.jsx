@@ -13,7 +13,9 @@ import './Note.css';
     }
 
 handleRemove(id){
-  alert('remove: ', id);
+  console.log('remove: ', id);
+
+  this.props.removeNote(id);
 
   }
   render(){
@@ -22,7 +24,10 @@ handleRemove(id){
       <div className="Note">
 
         <span
-        type="button" class="close" data-dismiss="modal" aria-label="Close"
+        type="button"
+        className="close"
+        data-dismiss="modal"
+        aria-label="Close"
         onClick={() =>  this.handleRemove(this.noteId) }
         >&times; </span>
         <p>{this.noteContent}</p>
